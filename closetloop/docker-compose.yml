@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  # 🍳 ฝั่งห้องครัว (Backend FastAPI)
+  backend:
+    image: tiangolo/uvicorn-gunicorn-fastapi:python3.9
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+
+  # 🎨 ฝั่งหน้าร้าน (Frontend - พี่ขอปรับใช้สวิตช์ง่าย ๆ ให้เปิดได้ทันทีก่อนครับ)
+  frontend:
+    image: nginx:alpine
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    ports:
+      - "80:80"

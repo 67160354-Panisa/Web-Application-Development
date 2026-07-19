@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Closet | ClosetLoop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 🎨 คุมโทนสีขาว-ดำ สไตล์ Pomelo */
+        :root {
+            --primary-color: #000000;
+            --text-muted: #767676;
+            --bg-light: #ffffff;
+            --border-color: #e5e5e5;
+        }
+
+        body {
+            font-family: 'Prompt', 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: var(--primary-color);
+        }
+
+        /* 1. แถบเมนูบนสุด (ใช้แบบเดียวกับหน้าแรกให้ดูเป็นเว็บเดียวกัน) */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            z-index: 1000;
+        }
+
+        .brand-logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 22px;
+            letter-spacing: 2px;
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-left: 30px;
+        }
+
+        /* 2. ส่วนหัวของหน้าตู้เสื้อผ้า */
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        /* 3. กล่องอัปโหลดเสื้อผ้าสุดหรู (Upload Zone) */
+        .upload-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+
+        .upload-box {
+            border: 1px dashed var(--primary-color); /* เส้นประสีดำบางๆ */
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            background-color: #fafafa;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .upload-box:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* ซ่อนปุ่มเลือกไฟล์เดิมๆ ที่น่าเกลียดออกไป */
+        .upload-box input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-icon {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .btn-upload-fake {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 25px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+        }
+
+        /* 4. ตารางแสดงเสื้อผ้าในตู้ (Closet Catalog Grid) */
+        .closet-section-title {
+            font-size: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        .closet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* จัดเรียงรูปออโต้ตามขนาดจอ */
+            gap: 25px;
+        }
+
+        /* การ์ดเสื้อผ้าแต่ละชิ้น */
+        .cloth-card {
+            border: 1px solid var(--border-color);
+            background-color: white;
+            overflow: hidden;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .cloth-img-placeholder {
+            background-color: #f5f5f5;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+
+        .cloth-info h3 {
+            font-size: 14px;
+            margin: 0 0 5px 0;
+            font-weight: 500;
+        }
+
+        .cloth-info p {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. แถบเมนูด้านบน -->
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo">CLOSETLOOP.</a>
+        <div class="nav-links">
+            <a href="index.html">หน้าแรก</a>
+            <a href="closet.html" style="font-weight: 600; text-decoration: underline;">ตู้เสื้อผ้า</a>
+            <a href="#">AI แมตช์ชุด</a>
+            <a href="#">ตลาดซื้อขาย</a>
+        </div>
+    </nav>
+
+    <!-- เนื้อหาหลัก -->
+    <div class="main-container">
+        
+        <!-- 2. หัวข้อหน้า -->
+        <div class="page-header">
+            <h1>MY VIRTUAL CLOSET</h1>
+            <p>อัปโหลดรูปภาพเสื้อผ้าของคุณเพื่อสร้างตู้เสื้อผ้าดิจิทัลส่วนตัว</p>
+        </div>
+
+        <!-- 3. โซนอัปโหลดรูปภาพ -->
+        <div class="upload-wrapper">
+            <div class="upload-box">
+                <div class="upload-icon">📷</div>
+                <p style="margin: 0; font-weight: 500;">ลากไฟล์รูปภาพมาวางที่นี่</p>
+                <p style="margin: 5px 0 0 0; font-size: 13px; color: var(--text-muted);">หรือคลิกเพื่อเลือกไฟล์จากคอมพิวเตอร์ของคุณ</p>
+                <div class="btn-upload-fake">เลือกรูปภาพ</div>
+                
+                <!-- ตัวรับไฟล์ของจริงที่ซ่อนอยู่เบื้องหลัง -->
+                <input type="file" id="clothing-upload" accept="image/*" multiple>
+            </div>
+        </div>
+
+        <!-- 4. พื้นที่แสดงเสื้อผ้าในตู้ (แสดงแบบ Mockup ไว้ก่อน) -->
+        <h2 class="closet-section-title">เสื้อผ้าทั้งหมดในตู้ของคุณ</h2>
+        
+        <div class="closet-grid">
+            <!-- ตัวอย่างชิ้นที่ 1 -->
+            <div class="cloth-card">
+                <div class="cloth-img-placeholder">👕</div>
+                <div class="cloth-info">
+                    <h3>เสื้อยืดทรง Oversize สีขาว</h3>
+                    <p>หมวดหมู่: เสื้อด้านบน</p>
+                </div>
+            </div>
+
+            <!-- ตัวอย่างชิ้นที่ 2 -->
+            <div class="cloth-card">
+                <div class="cloth-img-placeholder">👖</div>
+                <div class="cloth-info">
+                    <h3>กางเกงยีนส์ขากระบอกดำ</h3>
+                    <p>หมวดหมู่: กางเกง/กระโปรง</p>
+                </div>
+            </div>
+
+            <!-- ตัวอย่างชิ้นที่ 3 -->
+            <div class="cloth-card">
+                <div class="cloth-img-placeholder">🧥</div>
+                <div class="cloth-info">
+                    <h3>เสื้อแจ็คเก็ตยีนส์สีซีด</h3>
+                    <p>หมวดหมู่: เสื้อคลุมภายนอก</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>
