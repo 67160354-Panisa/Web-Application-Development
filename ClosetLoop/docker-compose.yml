@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: closetloop_postgres
+    environment:
+      POSTGRES_DB: closetloop
+      POSTGRES_USER: closetloop
+      POSTGRES_PASSWORD: closetloop123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U closetloop -d closetloop"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: closetloop_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@closetloop.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+
+  backend:
+    build: ./backend
+    container_name: closetloop_backend
+    environment:
+      DATABASE_URL: postgresql+psycopg2://closetloop:closetloop123@postgres:5432/closetloop
+      JWT_SECRET: closetloop-development-secret-change-me
+      CORS_ORIGINS: http://localhost:5173
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: closetloop_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://localhost:8000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  pgadmin_data:
